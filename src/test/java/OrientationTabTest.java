@@ -2,39 +2,39 @@ import org.junit.Test;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
-public class DirectionTabTest {
+public class OrientationTabTest {
     @Test
     public void getDirectionDecr() throws Exception {
-        DirectionTab directionTab = new DirectionTab();
+        OrientationTab orientationTab = new OrientationTab();
 
-        char newDirection = directionTab.getDirectionDecr('W');
+        char newDirection = orientationTab.getDirectionTurnLeft('W');
 
         assertThat(newDirection).isEqualTo('S');
     }
 
     @Test
     public void getDirectionIncr() throws Exception {
-        DirectionTab directionTab = new DirectionTab();
+        OrientationTab orientationTab = new OrientationTab();
 
-        char newDirection = directionTab.getDirectionIncr('W');
+        char newDirection = orientationTab.getDirectionTurnRight('W');
 
         assertThat(newDirection).isEqualTo('N');
     }
 
     @Test
     public void getDirectionDecr_limite() throws Exception {
-        DirectionTab directionTab = new DirectionTab();
+        OrientationTab orientationTab = new OrientationTab();
 
-        char newDirection = directionTab.getDirectionDecr('S');
+        char newDirection = orientationTab.getDirectionTurnLeft('S');
 
         assertThat(newDirection).isEqualTo('E');
     }
 
     @Test
     public void getDirectionIncr_limite() throws Exception {
-        DirectionTab directionTab = new DirectionTab();
+        OrientationTab orientationTab = new OrientationTab();
 
-        char newDirection = directionTab.getDirectionIncr('E');
+        char newDirection = orientationTab.getDirectionTurnRight('E');
 
         assertThat(newDirection).isEqualTo('S');
     }

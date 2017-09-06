@@ -5,60 +5,30 @@ public class Main {
 
     public static void main(String args[]) {
         Rover rover = new Rover(5, 5, 'S');
+        Mars mars = new Mars();
+        Printer printer = new Printer(rover, mars);
 
-        displayMars(rover);
+        printer.displayMars();
 
-        List<Character> arrayMove = new ArrayList<Character>();
+        List<Commandes> arrayMove = new ArrayList<>();
 
-        arrayMove.add('L');
-        arrayMove.add('F');
-        arrayMove.add('F');
-        arrayMove.add('R');
-        arrayMove.add('F');
-        arrayMove.add('R');
+        arrayMove.add(Commandes.F);
+        arrayMove.add(Commandes.F);
+        arrayMove.add(Commandes.F);
+        arrayMove.add(Commandes.R);
+        arrayMove.add(Commandes.F);
+        arrayMove.add(Commandes.R);
 
         System.out.println(' ');
 
-        rover.move(arrayMove);
-
-        displayMars(rover);
-
-    }
-
-    public static void displayMars(Rover rover) {
-
-        for (int i = 0; i < Mars.SIZE; i++) {
-            for (int j = 0; j < Mars.SIZE; j++) {
-                boolean isO = false;
-
-                for (Obstacle obstacle : rover.getMarsObstacles()) {
-                    if (j == obstacle.getX() && i == obstacle.getY()) {
-                        System.out.print(" O ");
-                        isO = true;
-                    }
-                }
-                if (i == rover.getPosition()[1] && j == rover.getPosition()[0]) {
-                    if (rover.getDirection() == 'E') {
-                        System.out.print(" R-");
-                    }
-                    if (rover.getDirection() == 'W') {
-                        System.out.print("-R ");
-                    }
-                    if (rover.getDirection() == 'N') {
-                        System.out.print("|R ");
-                    }
-                    if (rover.getDirection() == 'S') {
-                        System.out.print(" R|");
-                    }
-                } else {
-                    if (!isO) {
-                        System.out.print(" . ");
-                    }
-                }
-            }
-            System.out.println(' ');
-
+        try {
+            rover.travel(arrayMove);
+        } catch (ObstacleException e) {
+            e.printStackTrace();
         }
-        System.out.println("Direction : "+rover.getDirection());
+
+        printer.displayMars();
+
     }
+
 }

@@ -1,128 +1,71 @@
-import java.util.ArrayList;
 import java.util.List;
 
-public class Rover {
+class Rover {
+    private static final int STEP_FORWARD = 1;
+    private static final int STEP_BACKWARD = -1;
+    private static final int DONT_MOVE = 0;
     private int positionY;
     private int positionX;
     private char direction;
-    private DirectionTab directionTab;
-    private Mars mars;
+    private OrientationTab orientationTab;
+    private MPS mps;
 
 
-    public Rover(int positionX, int positionY, char direction) {
+    Rover(int positionX, int positionY, char direction) {
         this.positionY = positionY;
         this.positionX = positionX;
         this.direction = direction;
-        directionTab = new DirectionTab();
-        mars = new Mars();
+        orientationTab = new OrientationTab();
+        mps = new MPS();
     }
 
-    public int[] getPosition() {
+    int[] getPosition() {
         return new int[]{positionX, positionY};
     }
 
-    public char getDirection() {
+    char getDirection() {
         return direction;
     }
 
-    public boolean move(List<Character> arrayAction) {
-        for (Character move : arrayAction) {
-            int moveIncr = treatMove(move);
-            int directionIncr = treatDirection();
-            if (!verificationObstaclesAndSize(moveIncr, directionIncr)) return false;
+    void travel(List<Commandes> arrayAction) throws ObstacleException {
+        for (Commandes command : arrayAction) {
+            turn(command);
+            move(command);
         }
-        return true;
     }
 
-    private boolean verificationObstaclesAndSize(int moveIncr, int directionIncr) {
-        if (direction == 'S' || direction == 'N') {
-            int positionYTmp = positionY + (moveIncr * directionIncr);
-            positionYTmp = getLimiteSize(positionYTmp);
-
-            if (findObstacleY(positionYTmp)) {
-                return false;
-            }
-
-            positionY = positionYTmp;
-        } else {
-
-            int positionXTmp = positionX + (moveIncr * directionIncr);
-            positionXTmp = getLimiteSize(positionXTmp);
-
-            if (findObstacleX(positionXTmp)){
-                return false;
-            }
-
-            positionX = positionXTmp;
-        }
-        return true;
+    private void move(Commandes move) throws ObstacleException {
+        int nextStep = nextStep(move);
+        int orientationFactor = orientationTab.treatDirection(direction);
+        Position nextPosition = mps.nextPosition(currentPosition(), nextStep, orientationFactor, direction);
+        setPosition(nextPosition);
     }
 
-
-    private boolean findObstacleX(int positionXTmp) {
-        for (Obstacle obstacle : mars.getObstacles()) {
-            if (positionXTmp == obstacle.getX() && positionY == obstacle.getY()) {
-                System.out.println("Found obstacle, no more moving");
-                return true;
-            }
-        }
-        return false;
+    private void setPosition(Position nextPosition) {
+        positionX = nextPosition.getX();
+        positionY = nextPosition.getY();
     }
 
-    private boolean findObstacleY(int positionYTmp) {
-        for (Obstacle obstacle : mars.getObstacles()) {
-            if (positionYTmp == obstacle.getY() && positionX == obstacle.getX()) {
-                System.out.println("Found obstacle, no more moving");
-                return true;
-            }
-        }
-        return false;
+    private Position currentPosition() {
+        return new Position(positionX, positionY);
     }
 
-    private int getLimiteSize(int positionYTmp) {
-        if (positionYTmp == mars.SIZE) {
-            positionYTmp = 0;
-        } else if (positionYTmp == -1) {
-            positionYTmp = mars.SIZE - 1;
+    private void turn(Commandes move) {
+        if (move == Commandes.L) {
+            direction = orientationTab.getDirectionTurnLeft(direction);
+        } else if (move == Commandes.R) {
+            direction = orientationTab.getDirectionTurnRight(direction);
         }
-        return positionYTmp;
     }
 
-
-    private int treatMove(Character move) {
+    private int nextStep(Commandes move) {
         switch (move) {
-            case 'F':
-                return 1;
-            case 'B':
-                return -1;
-            case 'L':
-                direction = directionTab.getDirectionDecr(direction);
-                return 0;
-            case 'R':
-                direction = directionTab.getDirectionIncr(direction);
-                return 0;
+            case F:
+                return STEP_FORWARD;
+            case B:
+                return STEP_BACKWARD;
             default:
-                return 0;
+                return DONT_MOVE;
         }
     }
-
-    private int treatDirection() {
-        switch (direction) {
-            case 'S':
-            case 'E':
-                return 1;
-            case 'N':
-            case 'W':
-                return -1;
-
-            default:
-                return 0;
-
-        }
-    }
-
-    public ArrayList<Obstacle> getMarsObstacles() {
-        return mars.getObstacles();
-    }
-
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 
 public class RoverTest {
     @Test
@@ -32,14 +33,14 @@ public class RoverTest {
 
 
     @Test
-    public void getPosition_returns1_whenRoverIn0MoveForwardDirectSouth() {
+    public void getPosition_returns1_whenRoverIn0MoveForwardDirectSouth() throws ObstacleException {
         //Given
         Rover rover = new Rover(0, 0, 'S');
-        List<Character> arrayMove = new ArrayList<Character>();
-        arrayMove.add('F');
+        List<Commandes> arrayMove = new ArrayList<Commandes>();
+        arrayMove.add(Commandes.F);
 
         //When
-        rover.move(arrayMove);
+        rover.travel(arrayMove);
 
         //Then
         int[] position = rover.getPosition();
@@ -47,14 +48,13 @@ public class RoverTest {
     }
 
     @Test
-    public void getPosition_returns0_whenRoverIn1MoveForwardDirectionNorth() {
+    public void getPosition_returns0_whenRoverIn1MoveForwardDirectionNorth() throws ObstacleException {
         //Given
         Rover rover = new Rover(0, 1, 'N');
-        List<Character> arrayMove = new ArrayList<Character>();
-        arrayMove.add('F');
-
+        List<Commandes> arrayMove = new ArrayList<Commandes>();
+        arrayMove.add(Commandes.F);
         //When
-        rover.move(arrayMove);
+        rover.travel(arrayMove);
 
         //Then
         int[] position = rover.getPosition();
@@ -62,14 +62,14 @@ public class RoverTest {
     }
 
     @Test
-    public void getPosition_returns0_whenRoverIn1MoveBackwardDirectionSouth() {
+    public void getPosition_returns0_whenRoverIn1MoveBackwardDirectionSouth() throws ObstacleException {
         //Given
         Rover rover = new Rover(0, 1, 'S');
-        List<Character> arrayMove = new ArrayList<Character>();
-        arrayMove.add('B');
+        List<Commandes> arrayMove = new ArrayList<Commandes>();
+        arrayMove.add(Commandes.B);
 
         //When
-        rover.move(arrayMove);
+        rover.travel(arrayMove);
 
         //Then
         int[] position = rover.getPosition();
@@ -77,15 +77,15 @@ public class RoverTest {
     }
 
     @Test
-    public void getPosition_returns1_whenRoverIn1MoveBackwardDirectionSouth() {
+    public void getPosition_returns1_whenRoverIn1MoveBackwardDirectionSouth() throws ObstacleException {
         //Given
         Rover rover = new Rover(0, 1, 'S');
-        List<Character> arrayMove = new ArrayList<Character>();
-        arrayMove.add('B');
-        arrayMove.add('F');
+        List<Commandes> arrayMove = new ArrayList<Commandes>();
+        arrayMove.add(Commandes.B);
+        arrayMove.add(Commandes.F);
 
         //When
-        rover.move(arrayMove);
+        rover.travel(arrayMove);
 
         //Then
         int[] position = rover.getPosition();
@@ -93,29 +93,29 @@ public class RoverTest {
     }
 
     @Test
-    public void getPosition_returns2_whenRoverIn1MoveBackwardDirectionNorth() {
+    public void getPosition_returns2_whenRoverIn1MoveBackwardDirectionNorth() throws ObstacleException {
         //Given
         Rover rover = new Rover(0, 1, 'N');
-        List<Character> arrayMove = new ArrayList<Character>();
-        arrayMove.add('B');
+        List<Commandes> arrayMove = new ArrayList<Commandes>();
+        arrayMove.add(Commandes.B);
 
         //When
-        rover.move(arrayMove);
+        rover.travel(arrayMove);
 
         //Then
         int[] position = rover.getPosition();
         assertThat(position[1]).isEqualTo(2);
     }
 
- @Test
-    public void getDirection_returnsE_whenDirectionSouthMoveLeft() {
+    @Test
+    public void getDirection_returnsE_whenDirectionSouthMoveLeft() throws ObstacleException {
         //Given
         Rover rover = new Rover(0, 0, 'S');
-        List<Character> arrayMove = new ArrayList<Character>();
-        arrayMove.add('L');
+        List<Commandes> arrayMove = new ArrayList<Commandes>();
+        arrayMove.add(Commandes.L);
 
         //When
-        rover.move(arrayMove);
+        rover.travel(arrayMove);
 
         //Then
         int[] position = rover.getPosition();
@@ -126,17 +126,17 @@ public class RoverTest {
     }
 
     @Test
-    public void returns_N_and_3_1_whenRoverIn1_1DirectionSouthMove_L_F_F_L() {
+    public void returns_N_and_3_1_whenRoverIn1_1DirectionSouthMove_L_F_F_L() throws ObstacleException {
         //Given
         Rover rover = new Rover(3, 7, 'S');
-        List<Character> arrayMove = new ArrayList<Character>();
-        arrayMove.add('L');
-        arrayMove.add('F');
-        arrayMove.add('F');
-        arrayMove.add('L');
+        List<Commandes> arrayMove = new ArrayList<Commandes>();
+        arrayMove.add(Commandes.L);
+        arrayMove.add(Commandes.F);
+        arrayMove.add(Commandes.F);
+        arrayMove.add(Commandes.L);
 
         //When
-        rover.move(arrayMove);
+        rover.travel(arrayMove);
 
         //Then
         int[] position = rover.getPosition();
@@ -145,132 +145,151 @@ public class RoverTest {
         assertThat(position[0]).isEqualTo(5);
         assertThat(position[1]).isEqualTo(7);
     }
- @Test
-    public void returns0_whenYSupSizeMax() {
+
+    @Test
+    public void returns0_whenYSupSizeMax() throws ObstacleException {
         //Given
         Rover rover = new Rover(0, 9, 'S');
-        List<Character> arrayMove = new ArrayList<Character>();
-        arrayMove.add('F');
+        List<Commandes> arrayMove = new ArrayList<Commandes>();
+        arrayMove.add(Commandes.F);
 
         //When
-        rover.move(arrayMove);
+        rover.travel(arrayMove);
 
         //Then
         int[] position = rover.getPosition();
         assertThat(position[1]).isEqualTo(0);
     }
-@Test
-    public void returns0and9_whenYSupSizeMax() {
+
+    @Test
+    public void returns0and9_whenYSupSizeMax() throws ObstacleException {
         //Given
         Rover rover = new Rover(9, 9, 'E');
-        List<Character> arrayMove = new ArrayList<Character>();
-        arrayMove.add('F');
+        List<Commandes> arrayMove = new ArrayList<Commandes>();
+        arrayMove.add(Commandes.F);
 
         //When
-        rover.move(arrayMove);
+        rover.travel(arrayMove);
 
         //Then
         int[] position = rover.getPosition();
         assertThat(position[0]).isEqualTo(0);
         assertThat(position[1]).isEqualTo(9);
     }
-@Test
-    public void returns0and9_whenYInf0() {
+
+    @Test
+    public void returns0and9_whenYInf0() throws ObstacleException {
         //Given
         Rover rover = new Rover(0, 0, 'E');
-        List<Character> arrayMove = new ArrayList<Character>();
-        arrayMove.add('B');
+        List<Commandes> arrayMove = new ArrayList<Commandes>();
+        arrayMove.add(Commandes.B);
 
         //When
-        rover.move(arrayMove);
+        rover.travel(arrayMove);
 
         //Then
         int[] position = rover.getPosition();
         assertThat(position[0]).isEqualTo(9);
         assertThat(position[1]).isEqualTo(0);
     }
-@Test
+
+    @Test
     public void obstacle_whenYInf0() {
         //Given
         Rover rover = new Rover(0, 1, 'E');
-        List<Character> arrayMove = new ArrayList<Character>();
-        arrayMove.add('F');
+        List<Commandes> arrayMove = new ArrayList<Commandes>();
+        arrayMove.add(Commandes.F);
 
         //When
-        rover.move(arrayMove);
+        Throwable obstacle = catchThrowable(() -> {
+            rover.travel(arrayMove);
+        });
 
-        //Then
+        // Then
+        assertThat(obstacle).isInstanceOf(ObstacleException.class);
         int[] position = rover.getPosition();
         assertThat(position[0]).isEqualTo(0);
         assertThat(position[1]).isEqualTo(1);
     }
 
     @Test
-    public void obstacle_2() {
+    public void obstacle_2() throws ObstacleException {
         //Given
         Rover rover = new Rover(6, 2, 'S');
-        List<Character> arrayMove = new ArrayList<Character>();
-        arrayMove.add('F');
+        List<Commandes> arrayMove = new ArrayList<Commandes>();
+        arrayMove.add(Commandes.F);
 
         //When
-        rover.move(arrayMove);
+        Throwable obstacle = catchThrowable(() -> {
+            rover.travel(arrayMove);
+        });
 
-        //Then
+        // Then
+        assertThat(obstacle).isInstanceOf(ObstacleException.class);
         int[] position = rover.getPosition();
         assertThat(position[0]).isEqualTo(6);
         assertThat(position[1]).isEqualTo(2);
     }
 
     @Test
-    public void obstacle_3() {
+    public void obstacle_3() throws ObstacleException {
         //Given
         Rover rover = new Rover(8, 1, 'S');
-        List<Character> arrayMove = new ArrayList<Character>();
-        arrayMove.add('B');
+        List<Commandes> arrayMove = new ArrayList<Commandes>();
+        arrayMove.add(Commandes.B);
 
         //When
-        rover.move(arrayMove);
+        Throwable obstacle = catchThrowable(() -> {
+            rover.travel(arrayMove);
+        });
 
-        //Then
+        // Then
+        assertThat(obstacle).isInstanceOf(ObstacleException.class);
         int[] position = rover.getPosition();
         assertThat(position[0]).isEqualTo(8);
         assertThat(position[1]).isEqualTo(1);
     }
 
     @Test
-    public void obstacle_withListActions() {
+    public void obstacle_withListActions() throws ObstacleException {
         //Given
         Rover rover = new Rover(8, 1, 'S');
-        List<Character> arrayMove = new ArrayList<Character>();
-        arrayMove.add('B');
-        arrayMove.add('F');
-        arrayMove.add('F');
-        arrayMove.add('B');
+        List<Commandes> arrayMove = new ArrayList<Commandes>();
+        arrayMove.add(Commandes.B);
+        arrayMove.add(Commandes.F);
+        arrayMove.add(Commandes.F);
+        arrayMove.add(Commandes.B);
 
         //When
-        rover.move(arrayMove);
+        Throwable obstacle = catchThrowable(() -> {
+            rover.travel(arrayMove);
+        });
 
-        //Then
+        // Then
+        assertThat(obstacle).isInstanceOf(ObstacleException.class);
         int[] position = rover.getPosition();
         assertThat(position[0]).isEqualTo(8);
         assertThat(position[1]).isEqualTo(1);
     }
 
     @Test
-    public void obstacle_2_withActions() {
+    public void obstacle_2_withActions() throws ObstacleException {
         //Given
         Rover rover = new Rover(7, 3, 'E');
-        List<Character> arrayMove = new ArrayList<Character>();
-        arrayMove.add('B');
-        arrayMove.add('F');
-        arrayMove.add('F');
-        arrayMove.add('R');
-        arrayMove.add('F');
+        List<Commandes> arrayMove = new ArrayList<Commandes>();
+        arrayMove.add(Commandes.B);
+        arrayMove.add(Commandes.F);
+        arrayMove.add(Commandes.F);
+        arrayMove.add(Commandes.R);
+        arrayMove.add(Commandes.F);
 
         //When
-        rover.move(arrayMove);
+        Throwable obstacle = catchThrowable(() -> {
+            rover.travel(arrayMove);
+        });
 
-        //Then
+        // Then
+        assertThat(obstacle).isInstanceOf(ObstacleException.class);
         int[] position = rover.getPosition();
         assertThat(position[0]).isEqualTo(7);
         assertThat(position[1]).isEqualTo(3);

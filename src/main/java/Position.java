@@ -1,7 +1,17 @@
-package PACKAGE_NAME;
+class Position {
+    private int x;
+    private int y;
 
-/**
- * Created by jdo on 06/09/2017.
- */
-public class Position {
+    Position(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    int getX() {
+        return x;
+    }
+
+    int getY() {
+        return y;
+    }
 }
